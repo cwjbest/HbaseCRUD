@@ -1,6 +1,10 @@
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.filter.BinaryComparator;
+import org.apache.hadoop.hbase.filter.CompareFilter;
+import org.apache.hadoop.hbase.filter.Filter;
+import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -12,6 +16,7 @@ import java.util.List;
 
 /**
  * Created by cwj on 17-10-19.
+ *
  */
 public class HbaseCRUDTest {
 
@@ -145,6 +150,19 @@ public class HbaseCRUDTest {
                 logger.info("rowKey: " + rowKey + " colFamily: " + colFamily + " col: " + col +
                         " value: " + value + " timestamp: " + timestamp);
             }
+        }
+    }
+
+    @Test
+    public void scanByFilter() throws Exception{
+        String tableName = "User";
+        HTable table = new HTable(configuration, tableName);
+        Scan scan = new Scan();
+        Filter filter = new RowFilter(CompareFilter.CompareOp.EQUAL, new BinaryComparator("row1".getBytes()));
+        scan.setFilter(filter);
+        ResultScanner resultScanner = table.getScanner(scan);
+        for (Result r : resultScanner) {
+           logger.info(r);
         }
     }
 }

@@ -1,6 +1,10 @@
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.filter.BinaryComparator;
+import org.apache.hadoop.hbase.filter.CompareFilter;
+import org.apache.hadoop.hbase.filter.Filter;
+import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.util.ArrayList;
@@ -175,6 +179,21 @@ public class HbaseCRUD {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Hbase给scan操作配了很多的过滤器，共有28个Filter的实现类，分别代表了28种过滤方案
+     * 这只是其中一种，找出所有行健是“xxx”的记录
+     */
+    public static void scanByFilter(String tableName) throws Exception{
+        HTable table = new HTable(configuration, tableName);
+        Scan scan = new Scan();
+        Filter filter = new RowFilter(CompareFilter.CompareOp.EQUAL, new BinaryComparator("row1".getBytes()));
+        scan.setFilter(filter);
+        ResultScanner resultScanner = table.getScanner(scan);
+        for (Result r : resultScanner) {
+            System.out.println(r);
         }
     }
 }
