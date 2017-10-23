@@ -154,8 +154,7 @@ public class HbaseCRUDTest {
     }
 
     @Test
-    public void scanByFilter() throws Exception{
-        String tableName = "User";
+    public void scanByFilterTest() throws Exception{
         HTable table = new HTable(configuration, tableName);
         Scan scan = new Scan();
         Filter filter = new RowFilter(CompareFilter.CompareOp.EQUAL, new BinaryComparator("row1".getBytes()));
