@@ -133,7 +133,6 @@ public class HbaseCRUDTest {
     public void scanTest() throws Exception {
         HTable table = new HTable(configuration, tableName);
         Scan scan = new Scan(startRowKey.getBytes());
-//        Scan scan = new Scan();
         ResultScanner resultScanner = table.getScanner(scan);
         for (Result r : resultScanner) {
             List<Cell> cs = r.listCells();
